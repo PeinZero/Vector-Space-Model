@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../static/styles.css">
+    <title>Boolean Retreival Model</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="heading"> Short Stories</div>
+        <form class = search_form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="search_bar">
+                <div class = "type_text">
+                    {{ form.searched(class = "input" , placeholder="Search short stories") }}
+                </div>
+                <div class = "search_icon">
+                    <div style="margin-right: 5px; color:black">|</div>
+                    <i class="fas fa-search"> </i>
+                    {{form.submit( class = "search_btn")}}
+                </div>
+            </div>
+            <div class="alpha">
+                {{ form.alpha(class = "input" , value = 0) }}
+                <p>alpha</p>
+            </div>
+        </form>
+        {% if no_result %}
+            <div class = 'no_result'>no result found </div>
+        
+        {% elif documents %}
+            {% for doc,cosine_value in documents.items() %}
+                {% if cosine_value >= alpha_value and cosine_value != 0 %}
+                    <div class="results">
+                        <a class='title' href="{{url_for('stories' , docID = doc)}}"> {{titles[doc]}}{{" "}}{{"("}}{{doc}}{{")"}}</a>
+                        <p>{{startings[doc]}}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %} 
+    </div>
+</body>
+</html>
